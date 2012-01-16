@@ -61,6 +61,7 @@ struct mapnode_s {
 		MN_RED = 0,
 		MN_BLACK = 1
 	} mn_color;
+	mapnode_t *mn_parent;
 	mapnode_t *mn_child[2]; /* 0 - left and 1 - right */
 
 	const char *mn_key;
@@ -130,6 +131,50 @@ int map_update(map_t *map, const map_t *other);
  * @return zero on success or an errno value
  */
 int map_clear(map_t *map);
+
+/**
+ * Return the the node that matches the key parameter or a null
+ * pointer if no match can be made
+ *
+ * @param  map  reference that has been initialized by #map_init
+ * @param  key  null terminated string that names the element
+ * @return pointer to the matching node or null
+ */
+mapnode_t *map_find(const map_t *map, const char *key);
+
+/**
+ * Return the first key entry in the map base on the comparison function
+ *
+ * @param  map    first map that has been initialized by #map_init
+ * @return pointer to the first node or null
+ */
+mapnode_t *map_first(const map_t *map);
+
+/**
+ * Return the last key entry in the map base on the comparison function
+ *
+ * @param  map    first map that has been initialized by #map_init
+ * @return pointer to the last node or null
+ */
+mapnode_t *map_last(const map_t *map);
+
+/**
+ * Return the next node in the map based on the comparison function
+ * from the passed in node pointer
+ *
+ * @param  node  reference to a node in store in the map
+ * @return pointer to the next node or null
+ */
+mapnode_t *map_next(const mapnode_t *node);
+
+/**
+ * Return the previous node in the map based on the comparison function
+ * from the passed in node pointer
+ *
+ * @param  node  reference to a node in store in the map
+ * @return pointer to the previous node or null
+ */
+mapnode_t *map_prev(const mapnode_t *node);
 
 /* Declare some functions that work on standard types. */
 int map_insert_char(map_t *map, const char *key, char val);

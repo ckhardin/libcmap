@@ -70,7 +70,7 @@ int map_insert_ ## _label(map_t *map, const char *key, _type val)	\
 {									\
 	char buf[_strsz];						\
 									\
-	if(!map || !key)						\
+	if (!map || !key)						\
 		return EINVAL;						\
 	snprintf(buf, sizeof(buf), _strfmt, val);			\
 	return map_insert(map, key, buf);				\
@@ -80,7 +80,7 @@ int map_update_ ## _label(map_t *map, const char *key, _type val)	\
 {									\
 	char buf[_strsz];						\
 									\
-	if(!map || !key)						\
+	if (!map || !key)						\
 		return EINVAL;						\
 	snprintf(buf, sizeof(buf), _strfmt, val);			\
 	map_erase(map, key); /* ignore error code */			\

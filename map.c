@@ -78,3 +78,127 @@ map_clear(map_t *map)
 {
 	return ENOSYS;
 }
+
+mapnode_t *
+map_find(const map_t *map, const char *key)
+{
+	int cmp, dir;
+	mapnode_t *p;
+	mapnode_t *mn;
+
+	if (!map || !key)
+		return NULL;
+
+	mn = map->m_root;
+	while (mn != NULL) {
+		cmp = strcmp(key, mn->mn_key);
+		if (cmp == 0) {
+			/* match and we are it */
+			return mn;
+		}
+
+		dir = cmp > 0; /* left - false(0), right - true(1) */
+		mn = mn->mn_child[dir];
+	}
+	return NULL;
+}
+
+mapnode_t *
+map_first(const map_t *map)
+{
+	mapnode_t *mn;
+
+	if (!map)
+		return NULL;
+
+	mn = map->m_root;
+	while (mn != NULL) {
+		if (mn->mn_child[0] == NULL) /* left */
+			break;
+		mn = mn->mn_child[0];
+	}
+	return mn;
+}
+
+mapnode_t *
+map_last(const map_t *map)
+{
+	mapnode_t *mn;
+
+	if (!map)
+		return NULL;
+
+	mn = map->m_root;
+	while (mn != NULL) {
+		if (mn->mn_child[1] == NULL) /* right */
+			break;
+		mn = mn->mn_child[1];
+	}
+	return mn;
+}
+
+mapnode_t *
+map_next(const mapnode_t *node)
+{
+	mapnode_t *p;
+	mapnode_t *mn;
+
+	if (!node)
+		return NULL;
+
+	if (node->mn_child[1] != NULL) {
+		mn = node->mn_child[1]; /* right child */
+		while (mn->mn_child[0] != NULL)
+			mn = mn->mn_child[0]; /* go left all the way */
+		return mn;
+	}
+
+	/* In the red-black tree, the insert guarantess that everything to
+	 * left and down is a "smaller" - so, go up to the tree to find
+	 * next node by:
+	 * - if the node is a right child of the parent keep going
+	 * - parent is the next node if it is the left child of the parent
+	 */
+	p = node->mn_parent;
+	while (p != NULL) {
+		if (mn == p->mn_child[0])
+			break;
+		mn = p;
+		p = mn->mn_parent;
+	}
+	return p;
+}
+
+mapnode_t *
+map_prev(const mapnode_t *node)
+{
+	mapnode_t *p;
+	mapnode_t *mn;
+
+	if (!node)
+		return NULL;
+
+	if (node->mn_child[1] != NULL) {
+		mn = node->mn_child[1]; /* right child */
+		while (mn->mn_child[0] != NULL)
+			mn = mn->mn_child[0]; /* go left all the way */
+		return mn;
+	}
+
+	/* In the red-black tree, the insert guarantess that everything to
+	 * left and down is a "smaller" - so, go up to the tree to find
+	 * next node by:
+	 * - if the node is a left child of the parent keep going
+	 * - parent is the next node if it is the right child of the parent
+	 *
+	 * Opposite of the next function
+	 */
+	p = node->mn_parent;
+	while (p != NULL) {
+		if (mn == p->mn_child[1])
+			break;
+		mn = p;
+		p = mn->mn_parent;
+	}
+	return p;
+}
