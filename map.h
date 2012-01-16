@@ -65,7 +65,7 @@ struct mapnode_s {
 	mapnode_t *mn_child[2]; /* 0 - left and 1 - right */
 
 	const char *mn_key;
-	const char *mv_value;
+	const char *mn_val;
 };
 
 
