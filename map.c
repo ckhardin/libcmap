@@ -457,11 +457,11 @@ map_next(const mapnode_t *node)
 		return mn;
 	}
 
-	/* In the red-black tree, the insert guarantess that everything to
-	 * left and down is a "smaller" - so, go up to the tree to find
-	 * next node by:
+	/* The insert guarantees that everything left and down is "smaller"
+	 * So, go up the tree to find the next node by:
 	 * - if the node is a right child of the parent keep going
-	 * - parent is the next node if it is the left child of the parent
+	 * - if the node is a left child of the parent, then the parent
+	 *   is the next node
 	 */
 	p = node->mn_parent;
 	while (p != NULL) {
@@ -490,11 +490,11 @@ map_prev(const mapnode_t *node)
 		return mn;
 	}
 
-	/* In the red-black tree, the insert guarantess that everything to
-	 * left and down is a "smaller" - so, go up to the tree to find
-	 * next node by:
+	/* The insert guarantees that everything left and down is "smaller"
+	 * So, go up the tree to find the previous node by:
 	 * - if the node is a left child of the parent keep going
-	 * - parent is the next node if it is the right child of the parent
+	 * - if the node is a right child of the parent, then the parent
+	 *   is the previous node
 	 *
 	 * Opposite of the next function
 	 */
