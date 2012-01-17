@@ -357,7 +357,20 @@ map_erase(map_t *map, const char *key)
 int
 map_update(map_t *map, const map_t *other)
 {
-	return ENOSYS;
+	int err;
+	mapnode_t *mn;
+
+	if (!map || !other)
+		return EINVAL;
+
+	for (mn = map_first(other); mn != NULL; mn = map_next(mn)) {
+		map_erase(map, mn->mn_key);
+		err = map_insert(map, mn->mn_key, mn->mn_val);
+		if (err != 0) {
+			return err;
+		}
+	}
+	return 0;
 }
 
 
