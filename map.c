@@ -56,30 +56,30 @@ _map_isred(const mapnode_t *mn)
 static void
 _map_rotate(map_t *map, mapnode_t *mn, int dir)
 {
-        mapnode_t *p;
-        mapnode_t *mntmp;
+	mapnode_t *p;
+	mapnode_t *mntmp;
 
-        p = mn->mn_parent;
-        mntmp = mn->mn_child[!dir];
+	p = mn->mn_parent;
+	mntmp = mn->mn_child[!dir];
 
-        mn->mn_child[!dir] = mntmp->mn_child[dir];
-        if (mntmp->mn_child[dir] != NULL)
-                mntmp->mn_child[dir]->mn_parent = mn;
+	mn->mn_child[!dir] = mntmp->mn_child[dir];
+	if (mntmp->mn_child[dir] != NULL)
+		mntmp->mn_child[dir]->mn_parent = mn;
 
-        mntmp->mn_parent = p;
+	mntmp->mn_parent = p;
 
-        if (p != NULL) {
-                /* update the parent pointer, this is same in both directions */
-                if (mn == p->mn_child[0])
-                        p->mn_child[0] = mntmp;
-                else
-                        p->mn_child[1] = mntmp;
-        } else
-                map->m_root = mntmp;
+	if (p != NULL) {
+		/* update the parent pointer, this is same in both directions */
+		if (mn == p->mn_child[0])
+			p->mn_child[0] = mntmp;
+		else
+			p->mn_child[1] = mntmp;
+	} else
+		map->m_root = mntmp;
 
-        mntmp->mn_child[dir] = mn;
-        mn->mn_parent = mntmp;
-        return;
+	mntmp->mn_child[dir] = mn;
+	mn->mn_parent = mntmp;
+	return;
 }
 
 
@@ -200,6 +200,7 @@ _map_remove(map_t *map, mapnode_t *node)
 	node->mn_parent = NULL;
 	node->mn_child[0] = NULL;
 	node->mn_child[1] = NULL;
+	return;
 }
 
 

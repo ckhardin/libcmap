@@ -15,6 +15,7 @@ AC_PROG_CC
 AC_PROG_CC_C_O
 AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
+AC_PROG_RANLIB
 AC_PATH_PROG([ATFRUN], [atf-run])
 AC_PATH_PROG([ATFREPORT], [atf-report])
 
@@ -25,51 +26,45 @@ AC_HEADER_STDBOOL
 
 AC_TYPE_SIZE_T
 
-# Check for the Automated Test Framework (atf)
-AC_MSG_CHECKING([whether to build atf tests])
-AC_ARG_WITH([atf],
-	    [AS_HELP_STRING([--with-atf=PATH],
-			    [enable support for atf tests])
-	     AS_HELP_STRING([--without-atf],
-			    [disable support for atf tests])],
-	    [with_atf="$withval"])
+AC_ARG_WITH(arpc,[AS_HELP_STRING([--with-arpc], [Use Asynchronous RPC library])],
+	[case "$withval" in
+	  yes)
+		ac_with_arpc=yes
+		;;
+	  no)
+		ac_with_arpc=no
+		;;
+	  *)
+		ac_with_arpc=yes
+		ARPC_INCLUDES="-I$withval"
+		ARPC_LDFLAGS="-L$withval/libarpc"
+		;;
+	esac],
+	[ac_with_arpc=yes]
+)
+AM_CONDITIONAL(ARPC, test x$ac_with_arpc = xyes)
+AC_SUBST(ARPC_INCLUDES)
+AC_SUBST(ARPC_LDFLAGS)
 
-case "$with_atf" in
-  no)
-	AC_MSG_RESULT(no)
-	;;
-  *)
-	AC_MSG_RESULT(yes)
-
-	atf=""
-	dnl if there is a path, check it
-	if test -n "$with_atf"; then
-		if test "x$with_atf" != "xyes"; then
-			oldLDFLAGS=$LDFLAGS
-			oldCPPFLAGS=$CPPFLAGS
-			LDFLAGS="$LDFLAGS -L$with_atf/.libs"
-			CPPFLAGS="$CPPFLAGS -I$with_atf"
-			atf="yes"
-			AC_CHECK_LIB(atf-c, atf_no_error, ,
-				     atf=""
-				     LDFLAGS=$oldLDFLAGS
-				     CPPFLAGS=$oldCPPFLAGS)
-		fi
-	fi
-
-	if test "x$atf" != "xyes"; then
-		atf="yes"
-		AC_CHECK_LIB(atf-c, atf_no_error, ,
-			     atf="")
-	fi
-
-	if test "x$atf" = "xyes"; then
-		AC_CHECK_HEADERS([atf-c.h])
-	fi
-
-	;;
-esac
-AM_CONDITIONAL([BUILD_TESTS], [test "x$atf" = xyes])
+AC_ARG_WITH(atf,[AS_HELP_STRING([--with-atf], [Use NetBSD ATF])],
+	[case "$withval" in
+	  yes)
+		ac_with_atf=yes
+		;;
+	  no)
+		ac_with_atf=no
+		;;
+	  *)
+		ac_with_atf=yes
+		ATF_INCLUDES="-I$withval/include"
+		ATF_LDFLAGS="-L$withval/lib"
+		;;
+	esac],
+	[ac_with_atf=yes]
+)
+AM_CONDITIONAL(ATF, test x$ac_with_atf = xyes)
+AC_SUBST(ATF_INCLUDES)
+AC_SUBST(ATF_LDFLAGS)
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
