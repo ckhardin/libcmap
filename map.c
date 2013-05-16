@@ -40,6 +40,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <errno.h>
+#include <assert.h>
 
 #include "map.h"
 
@@ -133,7 +134,7 @@ _map_fixup(map_t *map, mapnode_t *parent, mapnode_t *node)
 }
 
 
-static mapnode_t *
+static void
 _map_remove(map_t *map, mapnode_t *node)
 {
 	int color;
@@ -308,7 +309,7 @@ map_insert(map_t *map, const char *key, const void *val)
 			break;
 
 		gp = p->mn_parent;
-		assert(gp != NULL, "grand parent of red node %p is null", p);
+		assert(gp != NULL);
 
 		dir = (p == gp->mn_child[0]);
 		uncle = gp->mn_child[dir];
