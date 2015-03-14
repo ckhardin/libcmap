@@ -1,0 +1,1 @@
+After writing these container functions in almost every C project, just make a library that can be used as a reference for the implementation.
