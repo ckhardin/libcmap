@@ -3,7 +3,7 @@
 
 AC_PREREQ(2.59)
 AC_INIT(libcmap, 0.1)
-AM_INIT_AUTOMAKE(libcmap, 0.1)
+AM_INIT_AUTOMAKE
 LT_INIT
 AC_CONFIG_SRCDIR([map.c])
 AC_CONFIG_MACRO_DIR([m4])
@@ -40,7 +40,7 @@ AC_ARG_WITH(arpc,[AS_HELP_STRING([--with-arpc], [Use Asynchronous RPC library])]
 		ARPC_LDFLAGS="-L$withval/libarpc"
 		;;
 	esac],
-	[ac_with_arpc=yes]
+	[ac_with_arpc=check]
 )
 AM_CONDITIONAL(ARPC, test x$ac_with_arpc = xyes)
 AC_SUBST(ARPC_INCLUDES)
