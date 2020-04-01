@@ -13,3 +13,5 @@ if ARPC
 libcmap_la_SOURCES += map_axdr.c
 
 endif
+
+include tests/Makefile.am.inc

@@ -24,7 +24,9 @@ compile
 missing
 stamp-h1
 aclocal.m4
-m4/
-autom4te.cache/
 ltmain.sh
 libtool
+m4/
+autom4te.cache/
+build/
+build-aux/

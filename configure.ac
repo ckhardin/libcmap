@@ -5,11 +5,13 @@ AC_INIT([libcmap], [0.1], [], [libcmap],
         [https://github.com/ckhardin/libcmap])
 AC_PREREQ(2.65)
 
-AM_INIT_AUTOMAKE([foreign subdir-objects -Wall])
-LT_INIT
 AC_CONFIG_SRCDIR([map.c])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h:config.h.in])
+AC_CONFIG_AUX_DIR([build-aux])
+
+AM_INIT_AUTOMAKE([foreign subdir-objects])
+LT_INIT
 
 # Check for the compilation tools
 AC_LANG(C)
@@ -25,6 +27,10 @@ AC_HEADER_TIME
 AC_HEADER_STDBOOL
 
 AC_TYPE_SIZE_T
+
+# Check for test-anything-support
+AC_REQUIRE_AUX_FILE([tap-driver.sh])
+AC_PROG_AWK
 
 AC_ARG_WITH(arpc,[AS_HELP_STRING([--with-arpc],
 	[Use Asynchronous RPC library])],
