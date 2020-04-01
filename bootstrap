@@ -1,17 +1,10 @@
 #!/bin/sh
 
 [ -e Makefile ] && make clean
-rm -rf autom4te.cache configure Makefile stamp-h1 
+rm -rf autom4te.cache config.log configure Makefile stamp-h1
 rm -rf src/Makefile src/.deps
 rm -rf Makefile.in aclocal.m4 config.log config.h
 rm -rf depcomp missing install-sh config.status
 
-# Run the autoconf steps
-LIBTOOLIZE=`which glibtoolize`
-if [ "x$LIBTOOLIZE" = "x" ]; then LIBTOOLIZE=libtoolize; fi
-$LIBTOOLIZE --copy --automake --force && \
-aclocal -I m4 $ACLOCAL_FLAGS && \
-autoheader && \
-autoconf && \
-automake --gnu --add-missing --copy
-rm -rf autom4te.cache config.log stamp-h1
+# Run the autoreconf steps
+autoreconf -i -s
