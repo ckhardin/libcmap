@@ -28,6 +28,24 @@ AC_HEADER_STDBOOL
 
 AC_TYPE_SIZE_T
 
+# Check for compile flags
+AC_MSG_CHECKING(whether compiler understands -Wall)
+old_CFLAGS="$CFLAGS"
+CFLAGS="$CFLAGS -Wall"
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
+	AC_MSG_RESULT(yes),
+	AC_MSG_RESULT(no)
+	CFLAGS="$old_CFLAGS"
+)
+AC_MSG_CHECKING(whether compiler understands -Werror)
+old_CFLAGS="$CFLAGS"
+CFLAGS="$CFLAGS -Werror"
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
+	AC_MSG_RESULT(yes),
+	AC_MSG_RESULT(no)
+	CFLAGS="$old_CFLAGS"
+)
+
 # Check for test-anything-support
 AC_REQUIRE_AUX_FILE([tap-driver.sh])
 AC_PROG_AWK

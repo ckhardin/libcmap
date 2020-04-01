@@ -5,11 +5,14 @@ set -e
 set -x
 
 [ -e Makefile ] && make clean
-rm -rf autom4te.cache config.log configure Makefile stamp-h1
-rm -rf src/Makefile src/.deps
-rm -rf Makefile.in aclocal.m4 config.log config.h
-rm -rf depcomp missing install-sh config.status
-[ ! -d m4 ] && mkdir m4
+rm -rf Makefile Makefile.in src/Makefile src/.deps
+rm -rf configure config.h config.h.in \
+	config.log config.status \
+	autom4te.cache aclocal.m4 stamp-h1 \
+	depcomp missing install-sh \
+	m4 build-aux
+mkdir -p m4
+mkdir -p build-aux
 
 # Run the autoreconf steps
 autoreconf -i -s

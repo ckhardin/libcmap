@@ -44,6 +44,10 @@
 
 #include "map.h"
 
+#ifndef	__DECONST
+#define	__DECONST(type, var)	((type)(uintptr_t)(const void *)(var))
+#endif
+
 
 static bool
 _map_isred(const mapnode_t *mn)
@@ -140,13 +144,14 @@ _map_remove(map_t *map, mapnode_t *node)
 	int color;
 	mapnode_t *p;
 	mapnode_t *c;
-	mapnode_t *mn;
 
 	if (node->mn_child[0] == NULL)
 		c = node->mn_child[1]; /* use right */
 	else if (node->mn_child[1] == NULL)
 		c = node->mn_child[0]; /* use left */
 	else {
+		mapnode_t *mn;
+
 		/* both children are null */
 		mn = map_next(node);
 
@@ -182,8 +187,8 @@ _map_remove(map_t *map, mapnode_t *node)
 		goto color;
 	}
 
-	p = mn->mn_parent;
-	color = mn->mn_color;
+	p = node->mn_parent;
+	color = node->mn_color;
 	if (c != NULL)
 		c->mn_parent = p;
 	if (p != NULL) {
@@ -221,7 +226,6 @@ int
 map_destroy(map_t *map)
 {
 	int err;
-	mapnode_t *mn;
 
 	err = map_clear(map);
 	if (err != 0)
@@ -270,7 +274,7 @@ map_insert(map_t *map, const char *key, const void *val)
 	}
 
 	mn = map->m_root;
-	while (mn != NULL) {
+	for (;;) {
 		cmp = strcmp(key, mn->mn_key);
 		if (cmp == 0) {
 			/* match and we are it */
@@ -398,8 +402,8 @@ map_clear(map_t *map)
 mapnode_t *
 map_find(const map_t *map, const char *key)
 {
-	int cmp, dir;
-	mapnode_t *p;
+	int cmp;
+	int dir;
 	mapnode_t *mn;
 
 	if (!map || !key)
@@ -462,7 +466,7 @@ map_next(const mapnode_t *node)
 	mapnode_t *p;
 	mapnode_t *mn;
 
-	if (!node)
+	if (node == NULL)
 		return NULL;
 
 	if (node->mn_child[1] != NULL) {
@@ -478,6 +482,7 @@ map_next(const mapnode_t *node)
 	 * - if the node is a left child of the parent, then the parent
 	 *   is the next node
 	 */
+	mn = __DECONST(typeof(mn), node);
 	p = node->mn_parent;
 	while (p != NULL) {
 		if (mn == p->mn_child[0])
@@ -513,6 +518,7 @@ map_prev(const mapnode_t *node)
 	 *
 	 * Opposite of the next function
 	 */
+	mn = __DECONST(typeof(mn), node);
 	p = node->mn_parent;
 	while (p != NULL) {
 		if (mn == p->mn_child[1])
