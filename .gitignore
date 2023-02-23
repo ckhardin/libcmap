@@ -1,0 +1,27 @@
+# build artifacts
+build*
+ccov
+
+# projects
+*.project
+*.cproject
+*.settings
+cscope.*
+.DS_Store
+.vscode
+.pydevproject
+.tags
+.list
+.idea
+.arcconfig
+.deps/
+GPATH
+GRTAGS
+GTAGS
+*.diff
+*.swp
+*.swo
+*.SAVE
+*.OLD
+*.NEW
+*.ORIG

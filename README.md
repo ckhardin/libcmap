@@ -19,3 +19,9 @@ $ cmake -S . -B build -Gninja
 $ cmake --build build
 $ ninja -C build test
 ```
+
+## Contributing
+
+This repo is using conventional commits for the messages and
+has basic hooks for doing ci workflows to verify some basic
+functional areas.
